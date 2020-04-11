@@ -1,0 +1,671 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>API Reference</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/all.js"></script>
+
+
+          <script>
+        $(function() {
+            setupLanguages(["bash","javascript","php","python"]);
+        });
+      </script>
+      </head>
+
+  <body class="">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+        <img src="images/logo.png" />
+                    <div class="lang-selector">
+                                  <a href="#" data-language-name="bash">bash</a>
+                                  <a href="#" data-language-name="javascript">javascript</a>
+                                  <a href="#" data-language-name="php">php</a>
+                                  <a href="#" data-language-name="python">python</a>
+                            </div>
+                            <div class="search">
+              <input type="text" class="search" id="input-search" placeholder="Search">
+            </div>
+            <ul class="search-results"></ul>
+              <div id="toc">
+      </div>
+            </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+          <!-- START_INFO -->
+<!-- END_INFO -->
+<h1>Introduction</h1>
+<p>Welcome to the Terms API! You can use our API to access Terms API endpoints, which can get the terms and conditions of all applications in Legops Company.</p>
+<p>We have language bindings in Shell, Javascript, Php, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
+<h1>1 - Auth</h1>
+<p>APIs for authentication</p>
+<!-- START_c9a1c827dbd09a44b847639f5cd2cde9 -->
+<h2>Get Token</h2>
+<p>Generate token for the given user.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://termsapi.test/auth" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"email":"johndoe@legops.com","password":"johndoe123"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://termsapi.test/auth"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "email": "johndoe@legops.com",
+    "password": "johndoe123"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://termsapi.test/auth',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'email' =&gt; 'johndoe@legops.com',
+            'password' =&gt; 'johndoe123',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://termsapi.test/auth'
+payload = {
+    "email": "johndoe@legops.com",
+    "password": "johndoe123"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "success": true,
+    "data": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC90ZXJtc2FwaS50Z"
+}</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "success": false,
+    "data": {
+        "email": [
+            "The email field is required."
+        ],
+        "password": [
+            "The password field is required."
+        ]
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "success": false,
+    "data": {
+        "email": [
+            "The provided credentials are incorrect."
+        ]
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST auth</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>email</code></td>
+<td>string</td>
+<td>required</td>
+<td>The email of the user.</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td>string</td>
+<td>required</td>
+<td>The password of the user.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_c9a1c827dbd09a44b847639f5cd2cde9 -->
+<h1>2 - Terms</h1>
+<p>APIs for terms quering</p>
+<!-- START_5b89246aa14beddeb6d57245f59bc8b2 -->
+<h2>Get Term content</h2>
+<p>Get the latest content of terms and coinditions for a specific application</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://termsapi.test/applications/signio/terms[/authorization_tool]" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://termsapi.test/applications/signio/terms[/authorization_tool]"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://termsapi.test/applications/signio/terms[/authorization_tool]',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://termsapi.test/applications/signio/terms[/authorization_tool]'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "success": true,
+    "data": {
+        "id": "4c5e17cb-b35e-4220-ae9a-782ccb8296da",
+        "language": "en",
+        "since": "2020-04-10 00:00:00",
+        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (404):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "success": false,
+    "data": "No query results"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "success": false,
+    "data": "An error has occured"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET applications/{application_slug}/terms[/{slug}]</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>application_slug</code></td>
+<td>required</td>
+<td>The slug of the application.</td>
+</tr>
+<tr>
+<td><code>slug</code></td>
+<td>optional</td>
+<td>The slug of the term.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_5b89246aa14beddeb6d57245f59bc8b2 -->
+<h1>3 - Accepted Terms</h1>
+<p>APIs for manage accepted terms</p>
+<!-- START_6cec7c3b1f8c84ccab60c472aa1f11f8 -->
+<h2>Get Acceptance</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Check if a person has accepted the last content of terms and conditions and return the record, at least one the of the parameters is required.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://termsapi.test/applications/signio/terms/authorization_tool/accepted?name=Jonh+Doe&amp;identification=102588373&amp;email=jonhdoe%40legops.com&amp;ip=10.0.0.1&amp;custom=0d7e27cb-c36f-4a21-be1b-882ccb0106dc" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: Bearer {token}"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://termsapi.test/applications/signio/terms/authorization_tool/accepted"
+);
+
+let params = {
+    "name": "Jonh Doe",
+    "identification": "102588373",
+    "email": "jonhdoe@legops.com",
+    "ip": "10.0.0.1",
+    "custom": "0d7e27cb-c36f-4a21-be1b-882ccb0106dc",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://termsapi.test/applications/signio/terms/authorization_tool/accepted',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; 'Bearer {token}',
+        ],
+        'query' =&gt; [
+            'name'=&gt; 'Jonh Doe',
+            'identification'=&gt; '102588373',
+            'email'=&gt; 'jonhdoe@legops.com',
+            'ip'=&gt; '10.0.0.1',
+            'custom'=&gt; '0d7e27cb-c36f-4a21-be1b-882ccb0106dc',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://termsapi.test/applications/signio/terms/authorization_tool/accepted'
+params = {
+  'name': 'Jonh Doe',
+  'identification': '102588373',
+  'email': 'jonhdoe@legops.com',
+  'ip': '10.0.0.1',
+  'custom': '0d7e27cb-c36f-4a21-be1b-882ccb0106dc',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {token}'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "success": true,
+    "data": {
+        "id": "0c5e17cb-b35e-4220-ae9a-782ccb8296da",
+        "accepted_at": "2020-04-10 00:00:00",
+        "name": "Jonh Doe",
+        "email": "jonhdoe@legops.com",
+        "identification": "102588373",
+        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        "ip": "10.0.0.1",
+        "custom": "0d7e27cb-c36f-4a21-be1b-882ccb0106dc",
+        "language": "en",
+        "since": "2010-01-01 00:00:00"
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "success": false,
+    "data": {
+        "ip": [
+            "The ip field is required when none of custom \/ name \/ email \/ identification are present."
+        ],
+        "custom": [
+            "The custom field is required when none of ip \/ name \/ email \/ identification are present."
+        ],
+        "name": [
+            "The name field is required when none of ip \/ custom \/ email \/ identification are present."
+        ],
+        "email": [
+            "The email field is required when none of ip \/ custom \/ name \/ identification are present."
+        ],
+        "identification": [
+            "The identification field is required when none of ip \/ custom \/ name \/ email are present."
+        ]
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (404):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "success": false,
+    "data": "No query results"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "success": false,
+    "data": "An error has occured"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET applications/{application_slug}/terms/{slug}/accepted</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>application_slug</code></td>
+<td>required</td>
+<td>The slug of the application.</td>
+</tr>
+<tr>
+<td><code>slug</code></td>
+<td>optional</td>
+<td>The slug of the term.</td>
+</tr>
+</tbody>
+</table>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>optional</td>
+<td>The name of the person who accept the terms and conditions.</td>
+</tr>
+<tr>
+<td><code>identification</code></td>
+<td>optional</td>
+<td>The identification number of the person.</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>optional</td>
+<td>The email of the person who accept the terms and conditions.</td>
+</tr>
+<tr>
+<td><code>ip</code></td>
+<td>optional</td>
+<td>The ip record where the acceptance came from.</td>
+</tr>
+<tr>
+<td><code>custom</code></td>
+<td>optional</td>
+<td>Custom filter value of the acceptance.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_6cec7c3b1f8c84ccab60c472aa1f11f8 -->
+<!-- START_74783773bf3897f54c0a554c1429d487 -->
+<h2>Set Acceptance</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Store a newly created acceptance record of terms and conditions in storage.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://termsapi.test/accepted_terms" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -H "Authorization: Bearer {token}" \
+    -d '{"terms_content_id":"0c5e17cb-b35e-4220-ae9a-782ccb8296da","accepted_at":"2020-04-10 00:00:00","name":"Jonh Doe","email":"jonhdoe@legops.com","identification":102588373,"ip":"10.0.0.1","custom":"0d7e27cb-c36f-4a21-be1b-882ccb0106dcs"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://termsapi.test/accepted_terms"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+let body = {
+    "terms_content_id": "0c5e17cb-b35e-4220-ae9a-782ccb8296da",
+    "accepted_at": "2020-04-10 00:00:00",
+    "name": "Jonh Doe",
+    "email": "jonhdoe@legops.com",
+    "identification": 102588373,
+    "ip": "10.0.0.1",
+    "custom": "0d7e27cb-c36f-4a21-be1b-882ccb0106dcs"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://termsapi.test/accepted_terms',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+            'Authorization' =&gt; 'Bearer {token}',
+        ],
+        'json' =&gt; [
+            'terms_content_id' =&gt; '0c5e17cb-b35e-4220-ae9a-782ccb8296da',
+            'accepted_at' =&gt; '2020-04-10 00:00:00',
+            'name' =&gt; 'Jonh Doe',
+            'email' =&gt; 'jonhdoe@legops.com',
+            'identification' =&gt; 102588373,
+            'ip' =&gt; '10.0.0.1',
+            'custom' =&gt; '0d7e27cb-c36f-4a21-be1b-882ccb0106dcs',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://termsapi.test/accepted_terms'
+payload = {
+    "terms_content_id": "0c5e17cb-b35e-4220-ae9a-782ccb8296da",
+    "accepted_at": "2020-04-10 00:00:00",
+    "name": "Jonh Doe",
+    "email": "jonhdoe@legops.com",
+    "identification": 102588373,
+    "ip": "10.0.0.1",
+    "custom": "0d7e27cb-c36f-4a21-be1b-882ccb0106dcs"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {token}'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "success": true,
+    "data": {
+        "id": "0c5e17cb-b35e-4220-ae9a-782ccb8296da",
+        "accepted_at": "2020-04-10 00:00:00",
+        "name": "Jonh Doe",
+        "email": "jonhdoe@legops.com",
+        "identification": "102588373",
+        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        "ip": "10.0.0.1",
+        "custom": "0d7e27cb-c36f-4a21-be1b-882ccb0106dc",
+        "language": "en",
+        "since": "2010-01-01 00:00:00"
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "success": false,
+    "data": {
+        "terms_content_id": [
+            "The terms content id field is required."
+        ],
+        "name": [
+            "The name field is required."
+        ],
+        "email": [
+            "The email field is required."
+        ],
+        "identification": [
+            "The identification field is required."
+        ]
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "success": false,
+    "data": "An error has occured"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST accepted_terms</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>terms_content_id</code></td>
+<td>string</td>
+<td>required</td>
+<td>The id of the user.</td>
+</tr>
+<tr>
+<td><code>accepted_at</code></td>
+<td>date</td>
+<td>optional</td>
+<td>The id of the user.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td>required</td>
+<td>The id of the user.</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>string</td>
+<td>required</td>
+<td>The id of the user.</td>
+</tr>
+<tr>
+<td><code>identification</code></td>
+<td>integer</td>
+<td>required</td>
+<td>The id of the user.</td>
+</tr>
+<tr>
+<td><code>ip</code></td>
+<td>string</td>
+<td>optional</td>
+<td>The id of the user.</td>
+</tr>
+<tr>
+<td><code>custom</code></td>
+<td>string</td>
+<td>optional</td>
+<td>The id of the user.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_74783773bf3897f54c0a554c1429d487 -->
+      </div>
+      <div class="dark-box">
+                        <div class="lang-selector">
+                                    <a href="#" data-language-name="bash">bash</a>
+                                    <a href="#" data-language-name="javascript">javascript</a>
+                                    <a href="#" data-language-name="php">php</a>
+                                    <a href="#" data-language-name="python">python</a>
+                              </div>
+                </div>
+    </div>
+  </body>
+</html>
